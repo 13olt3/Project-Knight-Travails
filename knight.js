@@ -1,18 +1,11 @@
-function knightMoves(startPos, endPos) {
-  let moveOne = new Node(startPos[0], startPos[1]);
-  let path = [startPos];
-  if (moveOne.position === endPos) {
-    path.push(moveOne.position);
-    return path;
-  } else {
-    let moveTwo = moveOne.possibleMoves();
-
-    for (let i = 0; i < moveTwo.length; ++i) {
-      console.log(moveTwo[i].possibleMoves());
-    }
+function knightMoves(startPos, endPos) {}
+function buildBoard(x, y) {
+  if (x > 7 || x < 0) {
+    throw new Error("Out of board range.");
   }
-}
-function buildBoard() {
+  if (y > 7 || y < 0) {
+    throw new Error("Out of board range.");
+  }
   let board = [
     [[], [], [], [], [], [], [], []],
     [[], [], [], [], [], [], [], []],
@@ -26,8 +19,8 @@ function buildBoard() {
 
   for (let i = 0; i <= 7; ++i) {
     for (let j = 0; j <= 7; ++j) {
-      let a = j,
-        b = i;
+      let a = i,
+        b = j;
 
       if (a + 2 <= 7 && b + 1 <= 7) {
         board[i][j].push([a + 2, b + 1]);
@@ -55,7 +48,8 @@ function buildBoard() {
       }
     }
   }
-  console.log(board[3][3]);
+  console.log(`From position ${x},${y}, possible moves are:`);
+  console.log(board[x][y]);
 }
 
-buildBoard();
+buildBoard(3, 4);
