@@ -1,11 +1,26 @@
 function knightMoves(startPos, endPos) {}
-function buildBoard(x, y) {
-  if (x > 7 || x < 0) {
-    throw new Error("Out of board range.");
+
+function adjacentCheck(startPos, endPos) {
+  let board = buildBoard();
+  let startString = startPos[0].toString().concat(startPos[1].toString());
+  console.log(startString);
+  console.log(positionIntoString(board[endPos[0]][endPos[1]]));
+  console.log(
+    positionIntoString(board[endPos[0]][endPos[1]]).includes(startString)
+  );
+}
+
+function positionIntoString(boardArray) {
+  let myString = "";
+  for (let i = 0; i < boardArray.length; ++i) {
+    for (let j = 0; j < 2; ++j) {
+      myString = myString.concat(boardArray[i][j].toString());
+    }
+    myString = myString.concat(", ");
   }
-  if (y > 7 || y < 0) {
-    throw new Error("Out of board range.");
-  }
+  return myString;
+}
+function buildBoard() {
   let board = [
     [[], [], [], [], [], [], [], []],
     [[], [], [], [], [], [], [], []],
@@ -48,8 +63,7 @@ function buildBoard(x, y) {
       }
     }
   }
-  console.log(`From position ${x},${y}, possible moves are:`);
-  console.log(board[x][y]);
+  return board;
 }
 
-buildBoard(3, 4);
+adjacentCheck([0, 0], [7, 7]);
