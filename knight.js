@@ -58,48 +58,8 @@ class Node {
     if (this.movesString().includes(targetNode)) return true;
     else return false;
   }
+
   path(inputNode, pathway = []) {
-    let endNode = new Node(inputNode[0], inputNode[1]);
-
-    let connections = endNode.possibleMoves();
-    let queue = [];
-
-    outerLoop: while (connections[0] !== undefined) {
-      //Adds the nodes next to endpoint to the queue.
-      console.log(connections[0]);
-      queue.push(connections.shift());
-      console.log(queue[0]);
-
-      while (queue[0] !== undefined) {
-        //Looks at first node in the queue.
-        //If the node being looked at is next to starting position, it adds it to the pathway.
-        if (!this.nextTo(queue[0].position)) {
-          //Makes a new node from the position that was added to the path.
-          let nextAdjacent = new Node(
-            queue[0].position[0],
-            queue[0].position[1]
-          );
-          pathway.push(queue[0].position);
-          //If the newly made node is not next to endpoint, then recursively runs program adding more nodes to the pathway.
-          if (!nextAdjacent.nextTo(inputNode)) {
-            nextAdjacent.path(inputNode, pathway);
-          }
-          break outerLoop;
-        }
-      }
-      //If the node is not next to starting position, then it moves to next node in the queue.
-      console.log(pathway);
-      let nextNode = queue.shift();
-      nextNode = nextNode.possibleMoves();
-      for (let i = 0; i < nextNode.length; ++i) {
-        connections.push(nextNode.shift());
-      }
-    }
-    //Returns every node between start position and end position
-    return pathway;
-  }
-
-  pathTwo(inputNode, pathway = []) {
     let endNode = new Node(inputNode[0], inputNode[1]);
     let connections = endNode.possibleMoves();
     let queue = [];
@@ -119,17 +79,21 @@ class Node {
             queue[0].position[0],
             queue[0].position[1]
           );
-          queue.shift();
+
+          // queue.shift();
 
           // if the found node is NOT next to end node, recursively run pathTwo() of newly created node after adding this node to the pathway
           if (!nextStartingPoint.nextTo(inputNode)) {
-            nextStartingPoint.pathTwo(inputNode, pathway);
-          } else break outerLoop;
-        }
+            nextStartingPoint.path(inputNode, pathway);
+          }
 
-        if (queue[0] === undefined) {
           break outerLoop;
         }
+
+        // if (queue[0] === undefined) {
+        //   break outerLoop;
+        // }
+        //if the node is not next to starting position, it adds the next set of knight moves to connections and deletes the first item in the queue
         let nextNode = queue[0].possibleMoves();
         for (let i = 0; i < nextNode.length; ++i) {
           connections.push(nextNode[i]);
@@ -147,7 +111,7 @@ let test = new Node(0, 0);
 // let connections = sixFive.possibleMoves();
 // console.log(connections);
 
-console.log(test.pathTwo([4, 4]));
+console.log(test.path([7, 6]));
 
 // while (queue[0] !== undefined) {
 //   if (this.nextTo(queue[0].position)) {
