@@ -1,8 +1,23 @@
 function knightMoves(startPos, endPos) {
-  let x = startPos[0];
-  let y = startPos[1];
-  let path = new Node(x, y);
-  console.log(path.path(endPos));
+  let start = new Node(startPos[0], startPos[1]);
+  if (start.nextTo(endPos)) {
+    let output = `You made it in 1 move! Here's your path: \n`;
+    output = output + JSON.stringify(startPos) + `\n`;
+    output = output + JSON.stringify(endPos);
+    console.log(output);
+  } else {
+    let path = start.path(endPos);
+    let output = `You made it in ${
+      path.length + 1
+    } moves! Here's your path: \n`;
+
+    output = output + JSON.stringify(startPos) + `\n`;
+    for (let i = 0; i < path.length; ++i) {
+      output = output + JSON.stringify(path[i]) + `\n`;
+    }
+    output = output + JSON.stringify(endPos);
+    console.log(output);
+  }
 }
 
 class Node {
@@ -58,13 +73,11 @@ class Node {
     if (this.movesString().includes(targetNode)) return true;
     else return false;
   }
-
   path(inputNode, pathway = []) {
     let endNode = new Node(inputNode[0], inputNode[1]);
     let connections = endNode.possibleMoves();
     let queue = [];
     let checkedMoves = "";
-    // need to build an array that saves all checked moves.
     outerLoop: while (connections[0] !== undefined) {
       if (checkedMoves.includes(connections[0].position)) {
         connections.shift();
@@ -75,24 +88,19 @@ class Node {
         // if it finds a node that is next to starting position, it runs this block of code
         if (this.nextTo(queue[0].position)) {
           pathway.push(queue[0].position);
+
           let nextStartingPoint = new Node(
             queue[0].position[0],
             queue[0].position[1]
           );
 
-          // queue.shift();
-
           // if the found node is NOT next to end node, recursively run pathTwo() of newly created node after adding this node to the pathway
           if (!nextStartingPoint.nextTo(inputNode)) {
             nextStartingPoint.path(inputNode, pathway);
           }
-
           break outerLoop;
         }
 
-        // if (queue[0] === undefined) {
-        //   break outerLoop;
-        // }
         //if the node is not next to starting position, it adds the next set of knight moves to connections and deletes the first item in the queue
         let nextNode = queue[0].possibleMoves();
         for (let i = 0; i < nextNode.length; ++i) {
@@ -106,29 +114,4 @@ class Node {
   }
 }
 
-let test = new Node(0, 0);
-// let sixFive = new Node(6, 5);
-// let connections = sixFive.possibleMoves();
-// console.log(connections);
-
-console.log(test.path([7, 6]));
-
-// while (queue[0] !== undefined) {
-//   if (this.nextTo(queue[0].position)) {
-//     pathway.push(queue[0].position);
-//     let queueAdjacentNode = new Node(
-//       queue[0].position[0],
-//       queue[0].position[1]
-//     );
-//     if (!queueAdjacentNode.nextTo(inputNode)) {
-//       queueAdjacentNode.path(inputNode, pathway, checkedMoves);
-//     }
-
-//     break outerLoop;
-//   }
-// }
-// let nextNode = queue.shift();
-// nextNode = nextNode.possibleMoves();
-// for (let i = 0; i < nextNode.length; ++i) {
-//   connections.push(nextNode.shift());
-// }
+knightMoves([0, 0], [4, 2]);
